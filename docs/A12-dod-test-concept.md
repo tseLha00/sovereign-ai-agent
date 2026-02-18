@@ -1,0 +1,65 @@
+# A12 — Definition of Done (DoD) and test concept (v0.1)
+
+## 1. Definition of Done (global)
+A backlog item is considered **Done** when all applicable points are satisfied:
+
+### Engineering
+- Code is committed and pushed to the repository
+- The solution is runnable with documented commands
+- Tests pass (`make test` or equivalent)
+- If the change affects performance, a perf check is run and results are stored
+
+### Documentation & evidence
+- Evidence is stored when relevant (screenshot/log/result JSON)
+- Criteria-related documents are updated if the change impacts scope/decisions/research
+- The GitHub issue is updated with a short completion comment including evidence links
+
+## 2. Sprint 1 DoD (baseline exit criteria)
+Sprint 1 is complete when the following can be demonstrated on the development environment:
+
+### Backend baseline
+- Service starts locally with a reproducible command (e.g., `make run`)
+- `GET /health` returns `200 {"status":"ok"}`
+- `POST /v1/chat/completions` returns an OpenAI-style response shape (non-streaming baseline)
+- Adapter abstraction exists (mock adapter used initially)
+
+### Quality baseline
+- Contract/API tests exist and pass:
+  - `/health`
+  - `/v1/chat/completions` response shape
+- Performance script runs and stores results under `evidence/perf/` (timestamped JSON)
+
+## 3. Test concept
+
+### 3.1 Test levels
+**Unit tests**
+- adapter selection/factory logic
+- request validation and response mapping helpers (if present)
+
+**Contract / API tests (pytest)**
+- `/health` returns 200 and expected body
+- `/v1/chat/completions` returns:
+  - `object = "chat.completion"`
+  - `id`, `created`, `model`
+  - `choices[0].message.role = "assistant"`
+  - `choices[0].message.content` is a non-empty string
+
+**Manual acceptance checks (smoke tests)**
+- A user can send a message and receives a response
+- Errors are shown in a user-friendly way (status code + readable message)
+- UI interaction feels responsive (thinking indicator if needed)
+
+### 3.2 Test data and determinism
+- For the mock adapter: deterministic output to keep tests stable
+- For the real model: tests validate schema and non-empty output (not exact wording)
+
+## 4. Execution (reproducible commands)
+- Run backend: `make run` (or documented command)
+- Run tests: `make test`
+- Run perf: `make perf`
+
+## 5. Evidence storage
+Evidence is kept in the repository to ensure traceability:
+- Test evidence: `docs/qa/test-evidence.md` (commands + outputs + screenshots if needed)
+- Perf results: `evidence/perf/YYYY-MM-DD_HHMM_results.json`
+- Issue completion comments: include links to commits and evidence files
