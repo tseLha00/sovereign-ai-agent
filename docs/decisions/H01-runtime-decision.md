@@ -1,4 +1,4 @@
-# H01 — Component dependency analysis and selection (v0.2)
+# H01 — Component dependency analysis and selection (v0.4)
 
 ## 1. Purpose of this decision
 The project depends on choosing an inference runtime that can run the **Apertus LLM locally** on the target machine.
@@ -6,13 +6,13 @@ This decision impacts:
 - performance and UX latency
 - memory feasibility (16 GB RAM)
 - integration complexity and maintainability
-- model format compatibility and deployment story
+- model artifact format compatibility and deployment story
 
 ## 2. System components and interfaces
 - **Frontend:** web-based chat UI (responsive, common chat features)
 - **Backend API:** OpenAI-style endpoints (FastAPI)
 - **Inference runtime:** executes the model locally behind an adapter (`adapter.chat(...)`)
-- **Model artifacts:** model weights + format (likely quantized)
+- **Model artifacts:** Apertus **8B** artifacts sourced from Hugging Face
 - **Observability:** logs + performance baseline script results + error reporting
 - **Execution:** local run first; containerization optional later if feasible
 
@@ -20,73 +20,82 @@ This decision impacts:
 - Target machine: **Mac mini M4**
 - RAM: **16 GB**
 Implications:
-- memory-sensitive inference; quantization likely required
-- performance/latency must be monitored with a benchmark (H08)
+- memory-sensitive inference; quantization required
+- latency must be monitored and improved with UX-first approach (H08)
 
 ## 4. Options considered (inference runtime)
 
 ### Option A — llama.cpp
 **Pros**
-- optimized C/C++; strong for quantized models
-- commonly used for local inference on limited memory
-- good basis for repeatable deployment and performance comparisons
+- optimized C/C++; strong for quantized inference
+- runs well on Apple Silicon with GGUF artifacts
+- clear story for reproducible local demos
 
 **Cons / uncertainties**
-- requires verifying Apertus model compatibility (format + tokenizer)
-- integration effort (wrapping, parameters, error handling)
+- requires GGUF artifacts; Transformers-only repos need GGUF distribution or conversion
+- integration effort: wrapper, parameters, error handling
 
 ### Option B — PyTorch + Transformers
 **Pros**
-- fastest iteration for experimentation
-- flexible for debugging model behavior and features
+- direct compatibility with Hugging Face safetensors
+- fast experimentation/debugging
 
 **Cons / uncertainties**
-- may exceed RAM constraints or be slow for larger models on 16 GB
-- packaging/deployment story may become heavier
+- may exceed RAM/latency expectations for 8B on 16 GB
+- heavier deployment story
 
-### Option C — Ollama (if acceptable)
+### Option C — Ollama (optional)
 **Pros**
-- fast setup for local demos; convenient model management
-- can improve demo UX quickly
-
+- fast local setup for demos
 **Cons / uncertainties**
-- abstraction may limit control
-- policy/licensing and “Accenture IP” implications must be clarified
-- model availability/compatibility for Apertus must be verified
+- model availability/compatibility must be verified
+- less control over integration details
 
 ## 5. Selection criteria (ranked)
-1) **Runs reliably on target machine (M4/16 GB)**  
-2) **Compatible with Apertus artifacts** (format + tokenizer + quantization)
-3) **UX/latency feasible** (or mitigatable with UI patterns)
+1) **Runs reliably on target machine (M4/16 GB)**
+2) **Compatible with Apertus 8B artifacts** (format + tokenizer + quantization)
+3) **UX/latency feasible** (or mitigatable via UX patterns)
 4) **Maintainable integration** with the adapter architecture
 5) **Repeatable setup/deployment** for demo usage
 6) **Compliance/IP constraints** acceptable for internal demo
 
-## 6. Current decision status
-- **Provisional direction:** llama.cpp
-- **Reason:** best match for on-device inference constraints and quantized runtime story
-- **Not yet final because:** Apertus format compatibility must be verified on the target machine
+## 6. Decision
+- **Selected inference runtime:** **llama.cpp**
+- **Reason:**
+  - best fit for Apple Silicon + limited RAM constraints
+  - supports quantized GGUF inference and a clean local demo story
+  - aligns with UX-first performance approach (H08)
 
-## 7. Validation plan (what must happen to finalize the decision)
-To confirm the runtime choice, a minimal PoC must be run on the target machine:
-- Load an Apertus-compatible model artifact (or the closest available format)
-- Execute one prompt end-to-end and collect:
-  - success/failure notes
-  - latency observation
-  - memory feasibility (qualitative; no strict numeric benchmark required)
+## 7. Selected model source + artifact path
+We separate **official source repo** (documentation/compliance reference) from **runnable artifact repo** (GGUF).
 
-Evidence to attach:
-- command log / notes (A02/A03 research log)
-- any runtime output or screenshots (evidence folder)
-- updated decision record with final recommendation
+### 7.1 Official model source (documentation reference)
+- Repo: `swiss-ai/Apertus-8B-Instruct-2509`
+- Used for: model identification, license reference, provenance in A02/A03.
 
-## 8. Risks and fallbacks
-- **Risk:** chosen runtime cannot load Apertus artifacts  
-  **Mitigation:** define a fallback path (e.g., Transformers baseline) and document the tradeoff.
-- **Risk:** latency is noticeable and cannot be fully optimized  
-  **Mitigation:** UX mitigation in UI (“thinking…”, streaming later, partial rendering) + perf monitoring (H08)
+### 7.2 Runnable llama.cpp artifacts (GGUF)
+- Repo: `unsloth/Apertus-8B-Instruct-2509-GGUF`
+- Initial file: `Apertus-8B-Instruct-2509-Q4_K_M.gguf`
+- Rationale: direct llama.cpp loading; Q4_K_M is a safe baseline on 16GB.
 
-## 9. Decision deadline
-Final runtime decision is targeted by:
-- **Milestone M2 (Sprint 2 early)**  
-after the compatibility check on the target machine.
+## 8. Validation plan (evidence required)
+To finalize and prove the runtime + artifact path:
+- Download the selected GGUF file
+- Run a minimal local inference command (one prompt)
+- Capture evidence:
+  - command used
+  - success/failure output
+  - qualitative latency notes (first-token time + total time observed)
+  - any errors and mitigation steps
+
+Evidence to store:
+- A02/A03 entries updated (R-002/R-003)
+- terminal output screenshot or log in `evidence/runtime/`
+- follow-up note in this decision record (append “Validation result” section)
+
+## 9. Risks and fallbacks
+- **Risk:** GGUF artifact quality/behavior differs from expectations  
+  **Mitigation:** try a second quant level (Q5_K_M) or alternative GGUF distribution; document changes.
+- **Risk:** performance/latency too high  
+  **Mitigation:** reduce context length, adjust params, add frontend “thinking…” UX; record in H08 baselines.
+- **Fallback:** PyTorch + Transformers as last resort if GGUF path blocks progress.

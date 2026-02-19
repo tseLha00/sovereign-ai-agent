@@ -9,6 +9,7 @@ Time is planned and tracked in **1-hour blocks** to enable transparent **Should/
 - Evidence: commits, issue history, meeting notes, perf results, test results
 
 ## 2. Calendar constraints
+
 ### IPA working days (execution)
 **Sprint 1 (4 IPA days):**
 - Day 1: Fri 13.02.2026
@@ -26,7 +27,7 @@ Time is planned and tracked in **1-hour blocks** to enable transparent **Should/
 
 ### Non-IPA days / constraints
 - Mondays are school days (no IPA work recorded).
-- “Out of Office” days are represented as grey columns in the time plan.
+- Out-of-office/blocked days are represented as grey columns in the time plan.
 
 ## 3. Sprint structure and goals
 
@@ -42,7 +43,7 @@ Sprint 1 exit criteria:
 - `make test` passes
 - `make perf` produces JSON results saved under evidence
 - API contract response shape is stable (tests)
-- decision record H01 exists (provisional decision + validation plan)
+- decision record H01 exists (**final runtime decision** + compatibility validation plan)
 
 ### Sprint 2 (Days 5–10): Apertus integration + demo readiness
 Goal: integrate the real inference runtime and deliver a demo-quality UX:
@@ -58,34 +59,33 @@ Sprint 2 exit criteria:
 - final documentation and evidence complete
 
 ## 4. Milestones (shown as vertical lines in the Gantt)
-Milestones are used to mark **reviewable checkpoints** (not just internal to-do items).
+Milestones mark **reviewable checkpoints**, not just tasks.
 
 - **M1 (end of Sprint 1):** Baseline complete  
   (API + tests + perf baseline + documentation discipline)
-- **M2 (Sprint 2 early):** H01 runtime decision confirmed  
-  (after compatibility check on target machine)
+- **M2 (Sprint 2 early):** Apertus 8B HF artifacts + license documented, and compatibility path confirmed  
+  (GGUF direct load or conversion plan)
 - **M3 (Sprint 2):** First successful Apertus inference through the API  
-  (request -> runtime -> response)
+  (request → runtime → response)
 - **M4 (Sprint 2):** UI usable on multiple devices  
   (responsive + common chat features)
 - **M5 (final):** Final demo + evidence + documentation complete
 
-## 5. Schould/Is tracking rule (1-hour block approach)
-- **Should** is planned in 1-hour increments in the time plan (green blocks).
-- **Is** is tracked in the same grid (red blocks).
+## 5. Should/Is tracking rule (1-hour block approach)
+- **Should** is planned in 1-hour increments in the time plan.
+- **Is** is tracked in the same grid.
 
 ### Handling deviations and partial hours
 Because the grid is 1-hour blocks:
-- Work < 60 minutes is tracked using one of these rules:
-  1) **Combine micro-tasks** into a single hour block and document the breakdown in the work journal, or
-  2) If the Excel supports it, represent half-hours using a second marking (optional), and still document details in the work journal.
+- Combine short tasks into one hour block and document the breakdown in the work journal, or
+- If your Excel supports it, represent half-hours using a second marking, and still document details in the work journal.
 
 ### Transparency rule
-If the visual total looks “messy” due to rounding:
+If totals look “messy” due to rounding:
 - The **work journal is the source of truth** for exact breakdowns.
-- Deviations are documented and linked to evidence (commits/issues).
+- Deviations are documented in A05 and linked to evidence (issues/commits).
 
 ## 6. References
-- Time plan file: `planning/timeplan.xlsx`
+- Time plan file: `planning/Timeplan.xlsx` (or your chosen path)
 - Backlog board: GitHub Project (Kanban)
-- Work journal: `journal/day-XX.md`
+- Work journal: `docs/journal/day-XX.md`

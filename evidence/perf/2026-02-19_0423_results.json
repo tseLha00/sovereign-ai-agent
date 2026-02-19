@@ -1,0 +1,25 @@
+{
+  "timestamp": 1771471381,
+  "url": "http://127.0.0.1:8000/v1/chat/completions",
+  "requests": 100,
+  "concurrency": 10,
+  "total_time_s": 0.248,
+  "throughput_rps": 403.19,
+  "success": 100,
+  "errors": 0,
+  "latency_ms": {
+    "min": 3,
+    "mean": 7.93,
+    "median": 6,
+    "p90": 14,
+    "p95": 26,
+    "max": 30
+  },
+  "status_codes": {
+    "200": 100
+  },
+  "meta": {
+    "repo_root": "/Users/t.anodunkhartsang/projects/sovereign-ai-agent",
+    "default_output_dir": "/Users/t.anodunkhartsang/projects/sovereign-ai-agent/evidence/perf"
+  }
+}

@@ -33,7 +33,7 @@ Sprint 1 is complete when the following can be demonstrated on the development e
 
 ### 3.1 Test levels
 **Unit tests**
-- adapter selection/factory logic
+- adapter selection/factory logic (if present)
 - request validation and response mapping helpers (if present)
 
 **Contract / API tests (pytest)**
@@ -54,12 +54,12 @@ Sprint 1 is complete when the following can be demonstrated on the development e
 - For the real model: tests validate schema and non-empty output (not exact wording)
 
 ## 4. Execution (reproducible commands)
-- Run backend: `make run` (or documented command)
+- Run backend: `make run`
 - Run tests: `make test`
 - Run perf: `make perf`
 
 ## 5. Evidence storage
 Evidence is kept in the repository to ensure traceability:
-- Test evidence: `docs/qa/test-evidence.md` (commands + outputs + screenshots if needed)
+- Tests: `backend/tests/`
 - Perf results: `evidence/perf/YYYY-MM-DD_HHMM_results.json`
 - Issue completion comments: include links to commits and evidence files
