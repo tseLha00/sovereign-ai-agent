@@ -1,27 +1,24 @@
-# Day 01 — 2026-02-13 (Sprint 1)
+# Day 01 — 2026-02-13
 
-## Plan (morning)
-- [x] Create documentation skeleton (A01/A02-A03/A04/A05/A12/H01/H08)
-- [x] Create repo structure + evidence folders
-- [x] Backend scaffold plan: FastAPI + adapter (mock)
-- [x] Define DoD v0.1
+## Goal (from timeplan)
+- Sprint planning + kickoff alignment
+- Repo/bootstrap baseline started
+- Set up documentation discipline
 
-## Work log (what I did)
-- …
+## Work done
+- Sprint planning completed (Sprint 1 baseline scope).
+- Expert/supervisor kickoff: confirmed scope/goals, constraints (Mac mini M4 / 16GB), Scrum method, and decision to maintain two timeplans (Sprint 1 + Sprint 2).
+- Repository bootstrap and initial backend scaffold created.
+- Identified early setup friction (git identity/auth).
 
-## Evidence created today
-- Links to commits
-- Links to screenshots
-- Meeting notes saved to `evidence/meeting-notes/`
+## Outputs / evidence
+- Meeting note: `evidence/meeting-notes/2026-02-13_expert-meeting.md`
+- Code: backend scaffold commits (commit: `<hash>`)
+- Initial docs created/started: A01, A02/A03 template, H01 draft (as applicable)
 
-## Decisions made
-- Environment confirmed: Mac mini M4, 16GB
-- Streaming: nice-to-have, `/v1/models` optional
+## Problems / deviations
+- Git setup took longer than planned due to identity/auth issues (see A05 deviation log).
 
-## Risks / blockers
-- …
-
-## AI/tool usage declaration
-- Tool: ChatGPT
-- Prompts used: …
-- What I verified myself: …
+## Next day plan
+- Continue backend baseline: /health + /v1/chat/completions skeleton
+- Add contract tests and start perf script work
