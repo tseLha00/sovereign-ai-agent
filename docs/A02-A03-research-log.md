@@ -1,4 +1,4 @@
-# A02/A03 — Research log (v0.5)
+# A02/A03 — Research log (v0.6)
 
 ## Purpose
 This log documents:
@@ -77,10 +77,10 @@ This log documents:
 - **Reliability:** High (primary source)
 - **Key findings:**
   - Provides GGUF files suitable for llama.cpp.
-  - License shown on repo page: `apache-2.0` (record what is shown on the page).
+  - License shown on repo page: `apache-2.0`
 - **Impact:**
   - Enables a direct llama.cpp PoC without conversion work.
-  - Baseline file planned for first-run on 16 GB: `Apertus-8B-Instruct-2509-Q4_K_M.gguf`.
+  - Baseline file selected for first-run on 16 GB: `Apertus-8B-Instruct-2509-Q4_K_M.gguf`.
 
 ---
 
@@ -90,7 +90,7 @@ This log documents:
 - **Source:** OpenAI API docs: https://platform.openai.com/docs/api-reference/chat
 - **Reliability:** High (primary source)
 - **Key findings:**
-  - Minimal response fields: `id`, `object`, `created`, `model`, `choices[].message`, `choices[].finish_reason`.
+  - Minimal response fields: `id`, `object`, `created`, `model`, `choices[].message`, `choices[].finish_reason`
 - **Impact:**
   - Defines the response schema verified by pytest contract tests in Sprint 1.
 
@@ -102,38 +102,32 @@ This log documents:
 - **Source:** Kickoff meeting notes (internal) — `evidence/meeting-notes/2026-02-13_expert-meeting.md`
 - **Reliability:** High (project authority)
 - **Key findings:**
-  - Demo focus: UX perceived responsiveness first.
-  - Metrics to track: latency percentiles (p50/p90/p95) + error rate.
+  - Demo focus: UX perceived responsiveness first
+  - Metrics to track: latency percentiles (p50/p90/p95) + error rate
 - **Impact:**
   - Confirms the KPI set in H08 and the JSON result format used by the perf script.
 
 ---
 
-### R-007 — Runtime PoC evidence (llama.cpp + GGUF + one prompt)
-- **Date:** 2026-02-19
+### R-007 — Runtime PoC validated (llama.cpp + GGUF + one prompt)
+- **Date:** 2026-02-26
 - **Related questions:** Q-001, Q-002, Q-003, Q-007
-- **Source:** Local terminal run + evidence stored in repository
+- **Source:** Local terminal run (`llama-cli`) + evidence stored in repository
 - **Reliability:** High (direct evidence)
-- **Status:** Planned until executed (do not claim “success” without evidence files)
+- **Key findings:**
+  - Model file loaded successfully from: `models/Apertus-8B-Instruct-2509-Q4_K_M.gguf`
+  - One prompt executed end-to-end and produced a valid response
+  - The model responded: *“Hello, I'm Apertus, a helpful assistant created by the SwissAI initiative.”*
+  - Prompt throughput and generation throughput were displayed successfully in terminal output
+- **Impact:**
+  - Confirms the GGUF + llama.cpp path works on the target machine
+  - Validates the selected runtime path in H01
+  - Reduces Sprint 2 backend integration risk significantly
 
-**What will be done (1-run PoC):**
-1) Download GGUF file (Q4_K_M baseline)
-2) Run one prompt locally through llama.cpp
-3) Store evidence (log + screenshot)
-
-**Evidence location (repo root):**
-- Folder: `evidence/runtime/`
-- Files:
-  - `evidence/runtime/2026-02-19_llamacpp_run.log`
-  - `evidence/runtime/2026-02-19_llamacpp_screenshot.png`
-
-**Key findings (fill after PoC):**
-- Load success/failure:
-- Observed latency (qualitative):
-- Errors + mitigation:
-
-**Impact (after PoC):**
-- Confirms artifact compatibility path for H01 and reduces Sprint 2 risk.
+**Evidence:**
+- `evidence/runtime/2026-02-26_llamacpp_run.log`
+- `evidence/runtime/2026-02-26_llamacpp_success.png`
+- `evidence/runtime/2026-02-26_llamacpp_note.md`
 
 ---
 
@@ -146,3 +140,4 @@ Record only what was actually used.
 | 2026-02-18 | Browser | Checked official HF repo | Official repo + license + artifact type | Verified page values manually |
 | 2026-02-18 | Browser | Checked GGUF repo options | Chosen GGUF repo + baseline file | Verified GGUF availability manually |
 | 2026-02-18 | Terminal | Ran Sprint 1 perf baseline (`make perf`) | Evidence JSON under `evidence/perf/` | Verified output manually |
+| 2026-02-26 | Terminal | Ran official llama.cpp PoC with local GGUF file | Runtime validation evidence | Verified model load and generated response manually |

@@ -1,4 +1,4 @@
-# A05 — Progress and risk tracking (v0.3)
+# A05 — Progress and risk tracking (v0.4)
 
 ## 1. Tracking cadence
 - Daily: update work journal + move issues on the board
@@ -7,7 +7,7 @@
 ## 2. Soll/Ist tracking approach
 - **Soll:** time plan Excel (1-hour blocks)
 - **Ist:** filled daily in Excel
-- **Exact minutes:** if work does not fit 1-hour blocks, the work journal contains the fine-grained breakdown (source of truth).
+- **Exact minutes:** if work does not fit 1-hour blocks, the work journal contains the fine-grained breakdown (source of truth)
 
 Rule:
 - If multiple short tasks happen in one hour, log the hour to the dominant task and document the split in the journal.
@@ -28,11 +28,10 @@ Use this when a deviation affects time plan, scope, or approach.
 
 | Date | Task / Issue | Soll | Ist | Deviation | Reason | Action / decision | Evidence |
 |---|---|---:|---:|---:|---|---|---|
-| 2026-02-13 | Git setup + project bootstrap | 1h | 2h | +1h | git identity/auth issues | documented setup steps; updated setup notes | (commit link) + README section |
-| 2026-02-13 | pytest import path error | 1h | 1h | 0h | package/import structure | fixed imports + confirmed tests pass | (commit link) |
+| 2026-02-13 | Git setup + project bootstrap | 1h | 2h | +1h | git identity/auth issues | documented setup steps; updated setup notes | commit reference + setup notes |
+| 2026-02-13 | pytest import path error | 1h | 1h | 0h | package/import structure | fixed imports + confirmed tests pass | commit reference |
 | 2026-02-13 | perf run initially failed | 0.5h | 0.5h | 0h | backend not running | documented “run app then perf” | `evidence/perf/2026-02-18_1332_results.json` |
-
-> Note: Replace “(commit link)” with the actual commit URL or short SHA from your repo.
+| 2026-02-26 | initial runtime PoC failed | 0.5h | 0.5h | 0h | incorrect model file path | corrected command to use local file in `models/` | `evidence/runtime/2026-02-26_llamacpp_run.log` + screenshot |
 
 ---
 
@@ -41,7 +40,7 @@ Probability: L/M/H. Impact: L/M/H.
 
 | ID | Risk | Probability | Impact | Mitigation (specific) | Trigger | Owner | Status |
 |---|---|---|---|---|---|---|---|
-| R1 | HF artifacts incompatible with llama.cpp | M | H | use GGUF repo OR timebox conversion; document steps | cannot load model/tokenizer mismatch | me | open |
+| R1 | HF artifacts incompatible with llama.cpp | M | H | use GGUF repo OR timebox conversion; document steps | cannot load model/tokenizer mismatch | me | **mitigated in part** |
 | R2 | 16GB RAM causes instability / OOM | M | H | use quantized GGUF (Q4 baseline); limit context; monitor memory | OOM / swap thrashing | me | open |
 | R3 | Latency noticeable → demo feels laggy | M | H | optimize backend; add “thinking…” UX; keep streaming as nice-to-have | p95 high / visible lag | me | open |
 | R4 | Scope creep | M | M | freeze minimal API scope; backlog priorities; enforce DoD | milestones threatened | me | open |
@@ -56,5 +55,6 @@ This is the audit trail for issues and how they were solved.
 
 | Date | Problem | Impact | Resolution | Evidence |
 |---|---|---|---|---|
-| 2026-02-13 | pytest import path error | blocked tests | fixed package layout/imports | (commit link) |
+| 2026-02-13 | pytest import path error | blocked tests | fixed package layout/imports | commit reference |
 | 2026-02-13 | perf script connection refused | blocked perf evidence | run backend first; documented steps | `evidence/perf/2026-02-18_1332_results.json` + README note |
+| 2026-02-26 | wrong GGUF path in initial `llama-cli` command | blocked first runtime PoC | used correct local model path: `models/Apertus-8B-Instruct-2509-Q4_K_M.gguf` | `evidence/runtime/2026-02-26_llamacpp_run.log` + screenshot |

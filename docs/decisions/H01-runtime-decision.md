@@ -1,4 +1,4 @@
-# H01 — Component dependency analysis and selection (v0.4)
+# H01 — Component dependency analysis and selection (v0.5)
 
 ## 1. Purpose of this decision
 The project depends on choosing an inference runtime that can run the **Apertus LLM locally** on the target machine.
@@ -19,6 +19,7 @@ This decision impacts:
 ## 3. Environment constraints (confirmed)
 - Target machine: **Mac mini M4**
 - RAM: **16 GB**
+
 Implications:
 - memory-sensitive inference; quantization required
 - latency must be monitored and improved with UX-first approach (H08)
@@ -47,17 +48,18 @@ Implications:
 ### Option C — Ollama (optional)
 **Pros**
 - fast local setup for demos
+
 **Cons / uncertainties**
 - model availability/compatibility must be verified
 - less control over integration details
 
 ## 5. Selection criteria (ranked)
-1) **Runs reliably on target machine (M4/16 GB)**
-2) **Compatible with Apertus 8B artifacts** (format + tokenizer + quantization)
-3) **UX/latency feasible** (or mitigatable via UX patterns)
-4) **Maintainable integration** with the adapter architecture
-5) **Repeatable setup/deployment** for demo usage
-6) **Compliance/IP constraints** acceptable for internal demo
+1) **Runs reliably on target machine (M4/16 GB)**  
+2) **Compatible with Apertus 8B artifacts** (format + tokenizer + quantization)  
+3) **UX/latency feasible** (or mitigatable via UX patterns)  
+4) **Maintainable integration** with the adapter architecture  
+5) **Repeatable setup/deployment** for demo usage  
+6) **Compliance/IP constraints** acceptable for internal demo  
 
 ## 6. Decision
 - **Selected inference runtime:** **llama.cpp**
@@ -71,31 +73,47 @@ We separate **official source repo** (documentation/compliance reference) from *
 
 ### 7.1 Official model source (documentation reference)
 - Repo: `swiss-ai/Apertus-8B-Instruct-2509`
-- Used for: model identification, license reference, provenance in A02/A03.
+- Used for: model identification, license reference, provenance in A02/A03
 
 ### 7.2 Runnable llama.cpp artifacts (GGUF)
 - Repo: `unsloth/Apertus-8B-Instruct-2509-GGUF`
 - Initial file: `Apertus-8B-Instruct-2509-Q4_K_M.gguf`
-- Rationale: direct llama.cpp loading; Q4_K_M is a safe baseline on 16GB.
+- Local file path used for official PoC: `models/Apertus-8B-Instruct-2509-Q4_K_M.gguf`
+- Rationale: direct llama.cpp loading; Q4_K_M is a safe baseline on 16GB
 
-## 8. Validation plan (evidence required)
-To finalize and prove the runtime + artifact path:
-- Download the selected GGUF file
-- Run a minimal local inference command (one prompt)
-- Capture evidence:
-  - command used
-  - success/failure output
-  - qualitative latency notes (first-token time + total time observed)
-  - any errors and mitigation steps
+## 8. Validation result (completed)
+A minimal local runtime PoC was executed successfully.
 
-Evidence to store:
-- A02/A03 entries updated (R-002/R-003)
-- terminal output screenshot or log in `evidence/runtime/`
-- follow-up note in this decision record (append “Validation result” section)
+### 8.1 Command used
+`llama-cli -m models/Apertus-8B-Instruct-2509-Q4_K_M.gguf -p "Say hello in one sentence." -n 64`
+
+### 8.2 Result
+- Model loaded successfully
+- One prompt executed successfully
+- The model returned a valid answer
+- Terminal output showed prompt throughput and generation throughput
+
+### 8.3 Conclusion
+- The selected **GGUF + llama.cpp** path is technically valid on the target machine
+- The runtime decision is therefore **validated**
+- The next step is integrating this validated runtime into the backend adapter layer
+
+### 8.4 Evidence
+- `evidence/runtime/2026-02-26_llamacpp_run.log`
+- `evidence/runtime/2026-02-26_llamacpp_success.png`
+- `evidence/runtime/2026-02-26_llamacpp_note.md`
 
 ## 9. Risks and fallbacks
 - **Risk:** GGUF artifact quality/behavior differs from expectations  
   **Mitigation:** try a second quant level (Q5_K_M) or alternative GGUF distribution; document changes.
+
 - **Risk:** performance/latency too high  
-  **Mitigation:** reduce context length, adjust params, add frontend “thinking…” UX; record in H08 baselines.
-- **Fallback:** PyTorch + Transformers as last resort if GGUF path blocks progress.
+  **Mitigation:** reduce context length, adjust parameters, add frontend “thinking…” UX; record in H08 baselines.
+
+- **Fallback:** PyTorch + Transformers as last resort if the GGUF path blocks further progress.
+
+## 10. Next implementation step
+The next engineering step is to:
+- implement a real `LlamaCppAdapter`
+- wire it into the existing adapter factory
+- expose real inference behind the current `POST /v1/chat/completions` endpoint without changing the public API contract
