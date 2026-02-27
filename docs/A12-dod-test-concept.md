@@ -1,4 +1,9 @@
-# A12 — Definition of Done (DoD) and test concept (v0.1)
+# A12 — Definition of Done (DoD) and test concept (v0.3)
+
+## Version history
+- **v0.1** — Initial Definition of Done and test concept created for Sprint 1 baseline (run, tests, perf, and evidence).
+- **v0.2** — Clarified test levels, evidence storage, and alignment with the current backend and frontend baseline.
+- **v0.3** — Updated the DoD with the real llama.cpp backend path, current automated test evidence, and final UI smoke-check evidence.
 
 ## 1. Definition of Done (global)
 A backlog item is considered **Done** when all applicable points are satisfied:
@@ -28,6 +33,23 @@ Sprint 1 is complete when the following can be demonstrated on the development e
   - `/health`
   - `/v1/chat/completions` response shape
 - Performance script runs and stores results under `evidence/perf/` (timestamped JSON)
+
+- ### Current validation status
+- Automated tests pass locally (`pytest -q`)
+- `GET /health` returns `200 {"status":"ok"}`
+- `POST /v1/chat/completions` returns a valid response using the real `llama.cpp` adapter
+- The frontend UI loads successfully and supports:
+  - message sending
+  - clear/reset
+  - language selection
+  - temperature selection
+
+Evidence:
+- `evidence/screenshots/2026-02-26_backend_make_test_pass.png`
+- `evidence/screenshots/2026-02-26_backend_health_200_ok.png`
+- `evidence/screenshots/2026-02-26_api_llamacpp_curl_success.png`
+- `evidence/screenshots/2026-02-26_ui_real_runtime.png`
+- `evidence/screenshots/2026-02-26_frontend_language_temperature_controls.png`
 
 ## 3. Test concept
 

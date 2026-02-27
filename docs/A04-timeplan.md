@@ -1,4 +1,8 @@
-# A04 — Time plan (v0.1)
+# A04 — Time plan (v0.2)
+
+## Version history
+- **v0.1** — Initial two-sprint Scrum planning structure created, including 1-hour block Should/Is tracking.
+- **v0.2** — Refined Sprint 2 milestones, clarified final documentation-transfer phase, and aligned references to the final timeplan files.
 
 ## 1. Planning approach
 The time plan follows a **Scrum-based execution** with two sprints and explicit review points.

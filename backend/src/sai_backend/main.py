@@ -13,13 +13,14 @@ from .adapters.factory import get_adapter
 from .errors import openai_error
 
 log = logging.getLogger("sai_backend")
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+)
 
 app = FastAPI(title="Sovereign AI Agent Backend")
-
 adapter = get_adapter()
 
-# --- Serve minimal UI from repo-root/frontend at /ui/ ---
 REPO_ROOT = Path(__file__).resolve().parents[3]
 FRONTEND_DIR = REPO_ROOT / "frontend"
 
@@ -30,20 +31,29 @@ if FRONTEND_DIR.exists():
     def root():
         return RedirectResponse(url="/ui/")
 
-# --- Error handlers (OpenAI-style error body) ---
+
 @app.exception_handler(RequestValidationError)
 async def validation_handler(_: Request, exc: RequestValidationError):
-    # Keep message short and audit-friendly
-    return openai_error("Invalid request body (schema validation failed).", status_code=422)
+    log.warning("Validation error: %s", exc)
+    return openai_error(
+        "Invalid request body (schema validation failed).",
+        status_code=422,
+    )
+
 
 @app.exception_handler(HTTPException)
 async def http_handler(_: Request, exc: HTTPException):
     return openai_error(str(exc.detail), status_code=exc.status_code)
 
+
 @app.exception_handler(Exception)
 async def unhandled_handler(_: Request, exc: Exception):
     log.exception("Unhandled server error: %s", exc)
-    return openai_error("Internal server error.", status_code=500, type_="server_error")
+    return openai_error(
+        "Internal server error.",
+        status_code=500,
+        type_="server_error",
+    )
 
 
 @app.get("/health")
@@ -68,19 +78,23 @@ class ChatRequest(BaseModel):
     def validate_messages(cls, msgs: list[ChatMessage]):
         if not msgs:
             raise ValueError("messages must not be empty")
-        # Ensure there is at least one user message for baseline behavior
+
         if not any(m.role == "user" for m in msgs):
             raise ValueError("messages must contain at least one user message")
+
         return msgs
 
 
 @app.post("/v1/chat/completions")
 def chat_completions(req: ChatRequest, response: Response):
     if req.stream:
-        # Sprint 1 scope: no streaming
-        raise HTTPException(status_code=400, detail="stream=true is not supported in Sprint 1 (non-streaming baseline).")
+        raise HTTPException(
+            status_code=400,
+            detail="stream=true is not supported in the current implementation.",
+        )
 
     started = time.perf_counter()
+
     result = adapter.chat(
         model=req.model,
         messages=[m.model_dump() for m in req.messages],
@@ -89,7 +103,6 @@ def chat_completions(req: ChatRequest, response: Response):
         stream=False,
     )
 
-    # Put latency into header instead of mutating the OpenAI response shape
     latency_ms = int((time.perf_counter() - started) * 1000)
     response.headers["x-backend-latency-ms"] = str(latency_ms)
 

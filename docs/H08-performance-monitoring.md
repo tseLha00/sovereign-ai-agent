@@ -1,4 +1,8 @@
-# H08 — Performance & stability monitoring (v0.1)
+# H08 — Performance & stability monitoring (v0.2)
+
+## Version history
+- **v0.1** — Initial UX-first performance monitoring strategy defined (KPIs, benchmark script, result storage, and optimization policy).
+- **v0.2** — Clarified that current formal perf baselines are mock-adapter only, while real llama.cpp runtime is functionally validated through smoke checks and screenshot evidence.
 
 ## 1. Goal (UX-first)
 Performance monitoring focuses on what matters for a demo:
@@ -27,50 +31,50 @@ Priority order (aligned with supervisor guidance):
 - Endpoint: `POST /v1/chat/completions`
 - Configurable parameters: requests, concurrency, payload size
 
-### 3.2 Result storage (traceable evidence)
+### 3.2 Result storage
 Each run stores a timestamped JSON file:
 - `evidence/perf/YYYY-MM-DD_HHMM_results.json`
 
-The JSON includes:
-- timestamp, URL
-- requests, concurrency, total time, throughput
-- success/errors + status codes
-- latency metrics (min/mean/median/p90/p95/max)
-
 ### 3.3 Logging
 Backend should log at least:
-- endpoint, status code
-- latency per request (ms)
-- error stack traces for failures
+- endpoint
+- status code
+- latency per request
+- error details for failures
 
-## 4. Baseline and comparison strategy
+## 4. Current baseline status
+Current measured baselines are based on the **mock adapter**.
+This is useful to establish:
+- framework overhead
+- request path stability
+- reproducible benchmark execution
 
-### Baseline
-- Create an initial baseline using the **mock adapter** (to measure framework overhead and request handling).
-- After integrating real inference, create a second baseline (real adapter).
+The real `llama.cpp` runtime is already **functionally validated** through:
+- successful standalone model loading
+- successful backend API response
+- successful frontend UI interaction
 
-### How to compare
-- Compare latency percentiles and error rate between versions.
-- If p95 latency increases noticeably after a change, investigate before continuing.
+However, a formal real-runtime performance comparison should only be added once a timestamped benchmark JSON is stored under `evidence/perf/`.
 
-## 5. Regular checks (when to run)
-- End of Day 1: baseline created (mock adapter)
-- After major backend changes (routing, adapter, runtime integration)
-- After integrating the real model/runtime
-- Before sprint review / demo run
+**Functional validation evidence:**
+- `evidence/screenshots/2026-02-26_llamacpp_success.png`
+- `evidence/screenshots/2026-02-26_api_llamacpp_curl_success.png`
+- `evidence/screenshots/2026-02-26_ui_real_runtime.png`
 
-## 6. Optimization policy (what actions to take)
-If performance issues are detected:
+## 5. Regular checks
+- Baseline after major backend changes
+- After real adapter integration
+- Before sprint review / demo
+
+## 6. Optimization policy
 
 ### Backend actions
-- profile request handling overhead
-- reduce unnecessary processing/logging overhead
-- adjust model/runtime parameters where applicable
-- ensure timeouts and concurrency settings are sane
+- reduce unnecessary processing overhead
+- improve runtime configuration
+- keep request handling stable
 
 ### Frontend UX mitigations
-If latency cannot be fully removed:
 - show “thinking…” indicator immediately
-- disable send while pending (or allow queueing with clear state)
-- show partial results (streaming) later if implemented
-- show clear error states + retry affordance
+- disable send while pending
+- show clear error states
+- add streaming later only if needed

@@ -1,4 +1,9 @@
-# Project documentation index (traceability) (v0.2)
+# Project documentation index (traceability) (v0.3)
+
+## Version history
+- **v0.1** — Initial traceability index created to map criteria, evidence, code, and documentation locations.
+- **v0.2** — Refined repository map, evidence references, and documentation navigation for clearer audit traceability.
+- **v0.3** — Updated final evidence mapping after runtime, API, test, and UI validation.
 
 ## Project
 **Name:** Sovereign AI agent demo (Apertus)  
@@ -27,8 +32,8 @@
 | A04 | `docs/A04-timeplan.md` + Excel in `docs/planning/` | timeplan file(s) |
 | A05 | `docs/A05-risk-log.md` | meeting notes + perf JSON + commits |
 | A12 | `docs/A12-dod-test-concept.md` | tests in `backend/tests/` |
-| H01 | `docs/decisions/H01-runtime-decision.md` | research log + runtime PoC evidence when executed |
-| H08 | `docs/H08-performance-monitoring.md` | results in `docs/qa/perf-baselines.md` + `evidence/perf/` |
+| H01 | `docs/decisions/H01-runtime-decision.md` | `evidence/runtime/` + final API/UI screenshots |
+| H08 | `docs/H08-performance-monitoring.md` | `docs/perf-baseline.md` + `evidence/perf/` |
 
 ## Versioning rules
 - Documents use semantic versions in the title: v0.1 / v0.2 / v0.3

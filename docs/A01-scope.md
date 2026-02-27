@@ -1,5 +1,9 @@
 # A01 — Scope analysis and project method selection (v0.2)
 
+## Version history
+- **v0.1** — Initial scope definition, stakeholder list, goals, and Scrum method selection.
+- **v0.2** — Refined scope boundaries, clarified acceptance criteria, and aligned the model source to Apertus 8B from Hugging Face.
+
 ## 1. Context and problem statement
 Accenture requires a **local (on-prem) sovereign AI demo** for client workshops: a chatbot powered by the **Apertus LLM (8B)** sourced from Hugging Face, usable through a **web UI** and via an **API compatible with the OpenAI de facto standard** (minimum: Chat Completions-style interface).
 

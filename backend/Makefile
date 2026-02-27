@@ -1,8 +1,11 @@
 run:
 	uvicorn sai_backend.main:app --reload --port 8000
 
+run-real:
+	LLM_BACKEND=llamacpp uvicorn sai_backend.main:app --reload --port 8000
+
 test:
-	pytest -q
+	LLM_BACKEND=mock pytest -q
 
 perf:
-	python qa/perf/run_perf.py --requests 100 --concurrency 10
+	LLM_BACKEND=mock python qa/perf/run_perf.py --requests 100 --concurrency 10

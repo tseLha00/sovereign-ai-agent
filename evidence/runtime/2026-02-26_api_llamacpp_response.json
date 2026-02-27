@@ -1,0 +1,1 @@
+{"id":"chatcmpl-1772119489133","object":"chat.completion","created":1772119493,"model":"apertus-8b","choices":[{"index":0,"message":{"role":"assistant","content":"Hello!"},"finish_reason":"stop"}],"usage":{"prompt_tokens":null,"completion_tokens":null,"total_tokens":null}}

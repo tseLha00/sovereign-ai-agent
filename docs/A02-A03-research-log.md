@@ -1,4 +1,13 @@
-# A02/A03 — Research log (v0.6)
+# A02/A03 — Research log (v0.7)
+
+## Version history
+- **v0.1** — Initial research structure created (questions + research entry template).
+- **v0.2** — Added initial environment, model-source, runtime-format, and API-contract research references.
+- **v0.3** — Expanded research notes with selected GGUF distribution and clarified evidence paths.
+- **v0.4** — Improved audit-trail clarity (date rule, source references, and stronger primary-source emphasis).
+- **v0.5** — Added performance-metric reasoning and prepared the runtime PoC entry.
+- **v0.6** — Replaced PoC placeholders with validated llama.cpp + GGUF runtime evidence and linked official evidence files.
+- **v0.7** — Added backend API validation with the real llama.cpp adapter and frontend validation for the final MUI-based chat UI.
 
 ## Purpose
 This log documents:
@@ -46,7 +55,7 @@ This log documents:
 ### R-002 — Apertus 8B official source confirmed (Transformers artifacts)
 - **Date:** 2026-02-18
 - **Related questions:** Q-001, Q-007
-- **Source:** Hugging Face model page: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509
+- **Source:** Hugging Face model page: `https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509`
 - **Reliability:** High (primary source)
 - **Key findings:**
   - Model: `swiss-ai/Apertus-8B-Instruct-2509` (8B)
@@ -61,7 +70,7 @@ This log documents:
 ### R-003 — llama.cpp artifact requirement: GGUF format
 - **Date:** 2026-02-18
 - **Related questions:** Q-002, Q-003, Q-008
-- **Source:** llama.cpp official repository: https://github.com/ggml-org/llama.cpp
+- **Source:** llama.cpp official repository: `https://github.com/ggml-org/llama.cpp`
 - **Reliability:** High (primary source)
 - **Key findings:**
   - llama.cpp uses **GGUF** as the standard model file format for local inference.
@@ -73,7 +82,7 @@ This log documents:
 ### R-004 — Selected GGUF distribution for implementation (ready-to-run artifacts)
 - **Date:** 2026-02-18
 - **Related questions:** Q-007, Q-008
-- **Source:** Hugging Face GGUF repo: https://huggingface.co/unsloth/Apertus-8B-Instruct-2509-GGUF
+- **Source:** Hugging Face GGUF repo: `https://huggingface.co/unsloth/Apertus-8B-Instruct-2509-GGUF`
 - **Reliability:** High (primary source)
 - **Key findings:**
   - Provides GGUF files suitable for llama.cpp.
@@ -87,7 +96,7 @@ This log documents:
 ### R-005 — Minimal OpenAI Chat Completions contract (reference shape)
 - **Date:** 2026-02-18
 - **Related questions:** Q-004
-- **Source:** OpenAI API docs: https://platform.openai.com/docs/api-reference/chat
+- **Source:** OpenAI API docs: `https://platform.openai.com/docs/api-reference/chat`
 - **Reliability:** High (primary source)
 - **Key findings:**
   - Minimal response fields: `id`, `object`, `created`, `model`, `choices[].message`, `choices[].finish_reason`
@@ -117,7 +126,7 @@ This log documents:
 - **Key findings:**
   - Model file loaded successfully from: `models/Apertus-8B-Instruct-2509-Q4_K_M.gguf`
   - One prompt executed end-to-end and produced a valid response
-  - The model responded: *“Hello, I'm Apertus, a helpful assistant created by the SwissAI initiative.”*
+  - The model returned a valid greeting response (`Hello!`)
   - Prompt throughput and generation throughput were displayed successfully in terminal output
 - **Impact:**
   - Confirms the GGUF + llama.cpp path works on the target machine
@@ -131,6 +140,46 @@ This log documents:
 
 ---
 
+### R-008 — Backend API validation with real llama.cpp adapter
+- **Date:** 2026-02-26
+- **Related questions:** Q-001, Q-003, Q-004, Q-006
+- **Source:** Local terminal/API validation (`curl` against `POST /v1/chat/completions`) + backend run logs
+- **Reliability:** High (direct evidence)
+- **Key findings:**
+  - The backend successfully exposed the existing OpenAI-style endpoint while using the real `llama.cpp` adapter.
+  - `POST /v1/chat/completions` returned a valid `200 OK` response with assistant content.
+  - The public API contract remained unchanged while the internal adapter implementation changed from mock to real runtime.
+- **Impact:**
+  - Confirms that the real inference runtime is integrated behind the planned backend interface.
+  - Validates the architecture decision to keep the API stable while replacing the adapter implementation.
+
+**Evidence:**
+- `evidence/screenshots/2026-02-26_api_llamacpp_curl_success.png`
+- `evidence/screenshots/2026-02-26_backend_llamacpp_api_200_ok.png`
+- `evidence/screenshots/2026-02-26_backend_health_200_ok.png`
+
+---
+
+### R-009 — Frontend demo UI validation (MUI + language/temperature controls)
+- **Date:** 2026-02-26
+- **Related questions:** Q-006
+- **Source:** Local browser-based UI validation (`/ui/`) + stored screenshots
+- **Reliability:** High (direct evidence)
+- **Key findings:**
+  - The frontend loads successfully through the backend at `/ui/`.
+  - The UI provides a usable chat interface with a message area, input field, clear/reset action, language selection, and temperature selection.
+  - The final frontend uses browser-served React + MUI components for the demo UI.
+- **Impact:**
+  - Confirms that the project includes a demonstrable user-facing chat UI, not only a backend API.
+  - Supports the UX requirement for a demo-ready interface.
+
+**Evidence:**
+- `evidence/screenshots/2026-02-26_ui_real_runtime.png`
+- `evidence/screenshots/2026-02-26_frontend_language_temperature_controls.png`
+- `evidence/screenshots/2026-02-26_frontend_clear_chat_success.png`
+
+---
+
 ## AI / tool usage declaration
 Record only what was actually used.
 
@@ -141,3 +190,4 @@ Record only what was actually used.
 | 2026-02-18 | Browser | Checked GGUF repo options | Chosen GGUF repo + baseline file | Verified GGUF availability manually |
 | 2026-02-18 | Terminal | Ran Sprint 1 perf baseline (`make perf`) | Evidence JSON under `evidence/perf/` | Verified output manually |
 | 2026-02-26 | Terminal | Ran official llama.cpp PoC with local GGUF file | Runtime validation evidence | Verified model load and generated response manually |
+| 2026-02-26 | Browser + Terminal | Validated final backend and frontend behavior locally | Stored screenshot evidence for runtime, API, tests, and UI | Verified responses, controls, and page behavior manually |

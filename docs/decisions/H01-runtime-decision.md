@@ -1,7 +1,15 @@
-# H01 — Component dependency analysis and selection (v0.5)
+# H01 — Component dependency analysis and selection (v0.6)
+
+## Version history
+- **v0.1** — Initial dependency-analysis draft with runtime options and selection criteria.
+- **v0.2** — Refined comparison of llama.cpp, Transformers, and Ollama against project constraints.
+- **v0.3** — Confirmed Apertus 8B model source and documented the selected GGUF artifact path.
+- **v0.4** — Strengthened rationale for choosing llama.cpp and clarified validation requirements.
+- **v0.5** — Added successful local runtime PoC result, validated the selected GGUF + llama.cpp path, and recorded the next backend integration step.
+- **v0.6** — Added backend adapter integration validation and confirmed that the selected runtime now works through the project API and demo UI.
 
 ## 1. Purpose of this decision
-The project depends on choosing an inference runtime that can run the **Apertus LLM locally** on the target machine.
+The project depends on choosing an inference runtime that can run the **Apertus LLM locally** on the target machine.  
 This decision impacts:
 - performance and UX latency
 - memory feasibility (16 GB RAM)
@@ -20,7 +28,7 @@ This decision impacts:
 - Target machine: **Mac mini M4**
 - RAM: **16 GB**
 
-Implications:
+**Implications:**
 - memory-sensitive inference; quantization required
 - latency must be monitored and improved with UX-first approach (H08)
 
@@ -63,10 +71,11 @@ Implications:
 
 ## 6. Decision
 - **Selected inference runtime:** **llama.cpp**
-- **Reason:**
-  - best fit for Apple Silicon + limited RAM constraints
-  - supports quantized GGUF inference and a clean local demo story
-  - aligns with UX-first performance approach (H08)
+
+**Reason:**
+- best fit for Apple Silicon + limited RAM constraints
+- supports quantized GGUF inference and a clean local demo story
+- aligns with UX-first performance approach (H08)
 
 ## 7. Selected model source + artifact path
 We separate **official source repo** (documentation/compliance reference) from **runnable artifact repo** (GGUF).
@@ -112,8 +121,18 @@ A minimal local runtime PoC was executed successfully.
 
 - **Fallback:** PyTorch + Transformers as last resort if the GGUF path blocks further progress.
 
-## 10. Next implementation step
-The next engineering step is to:
-- implement a real `LlamaCppAdapter`
-- wire it into the existing adapter factory
-- expose real inference behind the current `POST /v1/chat/completions` endpoint without changing the public API contract
+## 10. Implementation status
+The selected runtime is no longer only a standalone proof of concept.
+
+Current validated status:
+- GGUF model file loads successfully in `llama.cpp`
+- the backend uses the real `LlamaCppAdapter`
+- `POST /v1/chat/completions` returns a valid response through the project API
+- the frontend demo UI can submit requests to the backend and display the returned answer
+
+Evidence:
+- `evidence/screenshots/2026-02-26_llamacpp_success.png`
+- `evidence/screenshots/2026-02-26_api_llamacpp_curl_success.png`
+- `evidence/screenshots/2026-02-26_ui_real_runtime.png`
+
+The runtime decision is therefore not only selected but also implemented and validated for the demo scope.

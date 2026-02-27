@@ -3,32 +3,38 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sovereign AI Agent (Apertus) — Demo UI</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <title>Sovereign AI Agent (Apertus)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+  />
+
+  <style>
+    html, body, #root {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #08111f;
+    }
+  </style>
 </head>
 <body>
-  <header class="top">
-    <div class="brand">Sovereign AI Agent (Apertus)</div>
-    <div class="actions">
-      <button id="clearBtn" class="btn secondary">Clear</button>
-    </div>
-  </header>
+  <div id="root"></div>
 
-  <main class="wrap">
-    <section id="chat" class="chat"></section>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
-    <div id="error" class="error hidden"></div>
+  <script src="https://unpkg.com/@emotion/react@11/dist/emotion-react.umd.min.js"></script>
+  <script src="https://unpkg.com/@emotion/styled@11/dist/emotion-styled.umd.min.js"></script>
 
-    <form id="form" class="composer">
-      <input id="input" class="input" placeholder="Type your message…" autocomplete="off" />
-      <button id="sendBtn" class="btn" type="submit">Send</button>
-    </form>
+  <script src="https://unpkg.com/@mui/material@5/umd/material-ui.development.js"></script>
 
-    <div id="hint" class="hint">
-      API: <code>POST /v1/chat/completions</code> (mock adapter in Sprint 1)
-    </div>
-  </main>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <script src="./app.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./app.js"></script>
 </body>
 </html>
