@@ -32,6 +32,13 @@ The solution is considered successful if the following can be demonstrated:
 - **Quality baseline:** reproducible commands exist for run + tests + performance check.
 - **Performance monitoring:** a repeatable benchmark/perf script exists and stores results for comparison over time.
 
+## 3.3 Implementability and feasibility
+The solution is implementable within the IPA timebox because:
+- the backend scope is limited to a minimal OpenAI-style endpoint
+- the frontend scope is limited to a demo-ready chat UI
+- the selected runtime uses a quantized GGUF model compatible with local execution
+- performance is tracked separately and does not block the minimal demo baseline
+
 ## 4. Requirements
 
 ### 4.1 Functional requirements (initial scope)
@@ -62,6 +69,7 @@ The solution is considered successful if the following can be demonstrated:
 - Fine-tuning / training of the model
 - Production-grade infrastructure (Kubernetes, autoscaling, etc.)
 - Streaming responses (nice-to-have)
+- Validated containerized deployment in the Accenture environment (documented as optional extension only)
 
 ## 6. Constraints and assumptions
 - **Hardware constraint:** Mac mini M4, 16GB RAM (influences runtime and model format decisions)
@@ -70,6 +78,7 @@ The solution is considered successful if the following can be demonstrated:
 - `/v1/models` endpoint: optional until later
 - Streaming responses: nice-to-have, not mandatory
 - Target users expect a smooth, natural interaction experience (UX prioritized)
+- Containerization was considered as an optional packaging improvement, but direct Docker-based validation depends on tool availability in the company environment.
 
 ## 7. Project method selection: Scrum (2 sprints)
 

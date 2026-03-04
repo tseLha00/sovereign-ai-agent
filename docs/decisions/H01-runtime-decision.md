@@ -136,3 +136,30 @@ Evidence:
 - `evidence/screenshots/2026-02-26_ui_real_runtime.png`
 
 The runtime decision is therefore not only selected but also implemented and validated for the demo scope.
+Containerization was evaluated as an optional next step but was not part of the validated delivered baseline because the company environment did not allow direct Docker-based validation during implementation.
+
+## 11. Handover and operation notes
+For the current demo scope, the solution is operated locally on the assigned workstation.
+
+Operational basics:
+- Start backend (real runtime): `make run-real` or `LLM_BACKEND=llamacpp make run`
+- Health check: `GET /health`
+- UI entry point: `/ui/`
+- Required local artifact: `models/Apertus-8B-Instruct-2509-Q4_K_M.gguf`
+
+Known operator notes:
+- the model file is intentionally kept out of version control
+- first response may be slower due to model loading/runtime overhead
+- response quality depends on prompt wording, selected language, and temperature
+
+## 12. Containerization status
+A containerization path was considered as an optional packaging improvement for demo reproducibility.
+
+Current status:
+- containerization design files may be prepared,
+- but local Docker-based validation is environment-dependent and was blocked in the current company setup,
+- therefore containerization is treated as an optional packaging enhancement, not as a validated core requirement for the implemented demo baseline.
+
+Decision impact:
+- the core project scope remains fulfilled by the locally runnable backend + frontend + real inference path,
+- containerization can be documented as an extension or next-step improvement if not fully validated during the IPA timebox.

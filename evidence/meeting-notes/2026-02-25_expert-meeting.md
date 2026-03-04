@@ -1,60 +1,49 @@
-# Expert / Supervisor kickoff — 2026-02-25 
+# Expert / Supervisor check-in — 2026-02-25
 
 ## Participants
 - Supervisor: Enrico Viola
 - Apprentice: Tsering Lhamo Anodunkhartsang
-- (Experts present / consulted): Yves Kaufmann, Mirio Joël Eggmann
 
 ## Purpose
-Review the current implementation and documentation status, align expectations for the final delivery, and confirm the preparation steps for the technical presentation and oral examination.
+Review the current project status during Sprint 2, clarify expectations for the final implementation and documentation, and align the remaining work before submission and presentation.
 
 ## Topics discussed
-1) **Documentation discipline**
-- The work journal should include not only tasks completed, but also a short note on **what was learned** each day.
-- Markdown documentation should be transferred into the A4 document earlier, rather than leaving all transfer work to the very end.
+1) **Documentation quality**
+- The documentation should be transferred into the final A4 report format early enough to allow review and cleanup.
+- The report must stay technically precise, clearly structured, and written for a technical audience.
+- The final report draft should be shared with the expert in advance for feedback.
 
-2) **Versioning and commits**
-- Commits should be made regularly to preserve traceability and document meaningful progress steps.
+2) **Working method / discipline**
+- Commits should be made regularly so that progress remains traceable.
+- The work journal should explicitly state what was learned each day, not only what was done.
+- Submission should not be left until the last minute; the final hand-in should happen with buffer time.
 
-3) **Presentation expectations**
-- The presentation is aimed at a **technical audience**.
-- The implementation should therefore be explained through the code, architecture, and technical decisions.
-- A short live or guided demo is expected (approx. 10 minutes).
+3) **Presentation / oral exam**
+- The final presentation should be technically focused and suitable for technical reviewers.
+- The implementation, code decisions, and solution architecture should be explainable in a concise demo of around 10 minutes.
+- The oral exam may include detailed technical questions about code, architecture, and implementation choices.
 
-4) **Oral examination expectations**
-- The oral discussion may focus on technical details, including implementation choices, code structure, and terminology.
-- It is important to be prepared to explain the “nitty-gritty” technical parts clearly.
+4) **Planning / logistics**
+- Sprint 2 time planning must be handed in.
+- The presentation is planned on-site at Accenture on **13.03.2026 at 13:00**.
 
-5) **Submission discipline**
-- The work should be handed in on time, ideally a few hours before the official deadline to reduce risk.
-
-6) **Planning / delivery items**
-- The Sprint 2 time schedule must be submitted.
-- The final presentation is planned **on site at Accenture**.
-- Presence is expected on **13.03.2026 at 13:00**.
-
-7) **Documentation draft review**
-- An A4 draft of the documentation should be sent to the expert in advance for feedback.
+5) **Frontend expectations**
+- The frontend should use a component-based approach.
+- A component library such as **MUI** is acceptable and fits the expected implementation style for the demo UI.
 
 ## Decisions
-- Strengthen daily documentation discipline by recording learning outcomes in the work journal.
-- Prioritize earlier transfer from markdown into the formal A4 document.
-- Keep the final presentation and oral preparation strongly technical.
-- Submit Sprint 2 planning and final deliverables with time safety buffer.
-
-## Open questions / risks
-- Ensure the final A4 documentation is transferred and formatted early enough.
-- Ensure the technical presentation is supported by clear evidence and stable demo behavior.
+- The final documentation should be prepared in the A4 report structure before the last submission phase.
+- The implementation and presentation should remain technically focused.
+- The frontend should follow a component-based UI approach using MUI.
 
 ## Action items
-- Add “What I learned” notes to daily journal entries.
-- Continue committing regularly with meaningful progress checkpoints.
-- Transfer finalized markdown content into the A4 document as early as possible.
-- Submit Sprint 2 time schedule.
-- Send an A4 draft to the expert for feedback.
-- Prepare a technically focused presentation and demo for 13.03.2026.
+- Continue committing implementation and documentation changes regularly.
+- Update the work journal with explicit daily learning points.
+- Finalize and submit Sprint 2 time planning.
+- Prepare and share an A4 documentation draft for expert feedback.
+- Finalize the frontend with a component-based MUI implementation.
 
 ## Evidence references
-- Sprint 2 planning: `docs/planning/`
-- Final documentation draft: A4 document (Word/PDF deliverable)
-- Supporting technical evidence: `evidence/screenshots/` and `evidence/runtime/`
+- Sprint 2 time plan: `docs/planning/`
+- Final report draft: `docs/`
+- Repository commits: Git history / GitHub

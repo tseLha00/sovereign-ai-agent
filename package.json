@@ -1,0 +1,23 @@
+{
+  "name": "sovereign-ai-agent",
+  "version": "1.0.0",
+  "description": "On-prem sovereign AI chatbot demo based on the Apertus LLM, exposing an OpenAI-compatible API surface and a web UI. Includes QA (tests + performance baseline) and project documentation for traceable evidence.",
+  "private": true,
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tseLha00/sovereign-ai-agent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tseLha00/sovereign-ai-agent/issues"
+  },
+  "homepage": "https://github.com/tseLha00/sovereign-ai-agent#readme",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}

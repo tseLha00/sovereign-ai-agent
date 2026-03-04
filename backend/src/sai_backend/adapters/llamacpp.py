@@ -24,18 +24,19 @@ class LlamaCppAdapter(LLMAdapter):
         for msg in messages:
             role = str(msg.get("role", "user")).strip().lower()
             content = str(msg.get("content", "")).strip()
+
             if not content:
                 continue
 
             if role == "system":
                 latest_system = content
-            else:
+            elif role in {"user", "assistant"}:
                 non_system_messages.append({"role": role, "content": content})
 
         if latest_system:
             parts.append(f"SYSTEM: {latest_system}")
 
-        # Keep only recent turns to reduce prompt echo / repeated history.
+        # Keep only the most recent turns to reduce repetition / echo.
         trimmed = non_system_messages[-6:]
 
         for msg in trimmed:
@@ -125,10 +126,10 @@ class LlamaCppAdapter(LLMAdapter):
         normalized = self._normalize_content(extracted)
         deduped = self._remove_repeated_history(normalized, messages)
 
-        # Most important stability rule:
-        # prefer deduped if it still contains something,
-        # otherwise fall back to normalized, and only then to a safe message.
+        # Prefer deduped if it still contains content.
         final_content = deduped or normalized
+
+        # Safe fallback instead of hard failure when llama.cpp returns messy/empty output.
         if not final_content:
             final_content = (
                 "I'm sorry, I couldn't produce a clean response for that request. "
@@ -191,7 +192,7 @@ class LlamaCppAdapter(LLMAdapter):
             if not stripped:
                 continue
 
-            # Skip banner / ASCII art
+            # Skip banner / ASCII art.
             if "▄▄" in stripped or "██" in stripped or "▀▀" in stripped:
                 continue
 
@@ -205,7 +206,7 @@ class LlamaCppAdapter(LLMAdapter):
 
         cleaned_text = "\n".join(cleaned_lines).strip()
 
-        # If llama echoed prompt roles, keep only the text after the LAST ASSISTANT marker.
+        # Keep only text after the LAST assistant marker if prompt echo happened.
         if "ASSISTANT:" in cleaned_text:
             cleaned_text = cleaned_text.rsplit("ASSISTANT:", 1)[-1].strip()
 
@@ -217,11 +218,11 @@ class LlamaCppAdapter(LLMAdapter):
             if not stripped:
                 continue
 
-            # stop at timing footer if it appears
+            # Stop at performance footer.
             if stripped.startswith("[ Prompt:"):
                 break
 
-            # remove any echoed prompt lines after split
+            # Remove any prompt echo / control leftovers.
             if stripped.startswith(">"):
                 continue
             if stripped.startswith("USER:"):
@@ -244,10 +245,19 @@ class LlamaCppAdapter(LLMAdapter):
 
         cleaned = content.strip()
 
+        # Remove role labels if they slipped through.
         for prefix in ("ASSISTANT:", "Assistant:"):
             if cleaned.startswith(prefix):
                 cleaned = cleaned[len(prefix):].strip()
 
+        # Remove leaked truncation markers.
+        cleaned = cleaned.replace("... (truncated)", "")
+        cleaned = cleaned.replace("… (truncated)", "")
+
+        # Remove duplicated role labels if they appear mid-text.
+        cleaned = cleaned.replace("\nASSISTANT:", "\n").replace("\nAssistant:", "\n")
+
+        # Collapse excessive blank lines.
         while "\n\n\n" in cleaned:
             cleaned = cleaned.replace("\n\n\n", "\n\n")
 
@@ -267,16 +277,21 @@ class LlamaCppAdapter(LLMAdapter):
             and str(m.get("content", "")).strip()
         ]
 
+        # Check newest previous assistant answers first.
         for old in reversed(previous_assistant_messages):
             old_clean = old.strip()
             if not old_clean:
                 continue
 
-            # If the new answer starts with an older assistant reply,
-            # remove that prefix only if something remains afterwards.
-            if cleaned.startswith(old_clean):
+            # If new answer starts with an old answer, strip that prefix.
+            while cleaned.startswith(old_clean):
                 candidate = cleaned[len(old_clean):].lstrip(" \n:-")
-                if candidate:
-                    cleaned = candidate
+                if not candidate:
+                    break
+                cleaned = candidate
+
+        # Final guard against leaked truncation after prefix stripping.
+        cleaned = cleaned.replace("... (truncated)", "")
+        cleaned = cleaned.replace("… (truncated)", "")
 
         return cleaned.strip()

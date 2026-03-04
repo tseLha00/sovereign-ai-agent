@@ -19,13 +19,18 @@ const {
   Stack
 } = MaterialUI;
 
-const LANGUAGE_OPTIONS = ["English", "German", "French", "Italian"];
+const LANGUAGE_OPTIONS = ["English", "German", "French", "Italian", "Romansh"];
 const TEMP_OPTIONS = ["0.2", "0.5", "0.7", "1.0"];
 
 function buildSystemPrompt(language) {
+  const languageInstruction =
+    language === "Romansh"
+      ? "Reply only in Romansh (Rumantsch Grischun)."
+      : `Reply only in ${language}.`;
+
   return [
     "You are a helpful assistant.",
-    `Reply only in ${language}.`,
+    languageInstruction,
     "Do not repeat previous answers.",
     "Do not repeat the user's message.",
     "Do not include role labels like USER: or ASSISTANT:.",
@@ -38,7 +43,8 @@ function initialGreeting(language) {
     English: "Hello! How can I help you today?",
     German: "Hallo! Wie kann ich Ihnen heute helfen?",
     French: "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
-    Italian: "Ciao! Come posso aiutarti oggi?"
+    Italian: "Ciao! Come posso aiutarti oggi?",
+    Romansh: "Allegra! Co poss jau gidar tai oz?"
   };
 
   return greetings[language] || greetings.English;
@@ -160,8 +166,15 @@ function App() {
         throw new Error(data?.error?.message || `Request failed (${res.status})`);
       }
 
-      const content =
-        data?.choices?.[0]?.message?.content?.trim() || "(no content)";
+      let content =
+          data?.choices?.[0]?.message?.content?.trim() || "(no content)";
+      content = content
+          .replace(/\.\.\.\s*\(truncated\)/gi, "")
+          .replace(/…\s*\(truncated\)/gi, "")
+          .trim();
+      if (!content) {
+          content = "(no content)";
+      }
 
       setMessages((prev) => [...prev, { role: "assistant", content }]);
     } catch (err) {

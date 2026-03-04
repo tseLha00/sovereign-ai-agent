@@ -59,7 +59,7 @@ Goal: integrate the real inference runtime and deliver a demo-quality UX:
 Sprint 2 exit criteria:
 - `/v1/chat/completions` uses real inference at least for a minimal path
 - demo UI usable on common devices/resolutions
-- perf results compared against baseline and documented
+- performance behavior is documented honestly; at minimum, existing baselines and current runtime validation status are recorded
 - final documentation and evidence complete
 
 ## 4. Milestones (shown as vertical lines in the Gantt)
@@ -90,6 +90,23 @@ If totals look “messy” due to rounding:
 - Deviations are documented in A05 and linked to evidence (issues/commits).
 
 ## 6. References
-- Time plan file: `planning/Timeplan.xlsx` (or your chosen path)
-- Backlog board: GitHub Project (Kanban)
-- Work journal: `docs/journal/day-XX.md`
+- Sprint 1 time plan: `docs/planning/Timeplan_Sprint1.xlsx`
+- Sprint 2 time plan: `docs/planning/Timeplan_Sprint2.xlsx`
+- Work journal: `docs/journal/`
+- Deviations and risks: `docs/A05-risk-log.md`
+
+## 7. Final transfer into A4 report
+The documentation is not only a final-step activity.  
+A controlled transfer into the final A4 report begins before implementation is fully finished.
+
+This transfer phase includes:
+- moving validated markdown content into the final report structure,
+- improving narrative flow and readability,
+- reducing duplicated technical detail,
+- selecting only the strongest screenshots as figures,
+- adding formal report elements (header/footer, TOC, glossary, sources).
+
+Reason:
+- this reduces end-of-project risk,
+- improves documentation quality,
+- and aligns with expert feedback that the A4 version should be started early.
